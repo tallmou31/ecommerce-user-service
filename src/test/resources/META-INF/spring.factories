@@ -1,0 +1,1 @@
+org.springframework.test.context.ContextCustomizerFactory = sn.esmt.mp2isi.ecommerce.userservice.config.TestContainersSpringContextCustomizerFactory
