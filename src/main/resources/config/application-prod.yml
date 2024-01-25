@@ -54,6 +54,23 @@ spring:
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
     contexts: prod
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: om.sn.partner@gmail.com
+    password: sygxzdkbihgzfvxa
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          allow8bitmime: true
+          ssl:
+            trust: smtp.gmail.com
+            protocols: TLSv1.2
+        smtps:
+          allow8bitmime: true
   thymeleaf:
     cache: true
   sleuth:
@@ -120,6 +137,8 @@ jhipster:
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
+  mail: # specific JHipster mail property, for standard properties see MailProperties
+    base-url: http://127.0.0.1:8080
   logging:
     use-json-format: false # By default, logs are not in Json format
     logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
@@ -136,4 +155,9 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-# application:
+application:
+  admins:
+    - username: admin
+      email: lamine.tall31@gmail.com
+      first-name: Mouhamed
+      last-name: TALL
