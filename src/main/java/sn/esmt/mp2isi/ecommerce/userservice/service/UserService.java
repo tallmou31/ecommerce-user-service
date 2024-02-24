@@ -297,4 +297,13 @@ public class UserService {
     public List<String> getAuthorities() {
         return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
     }
+
+    @Transactional(readOnly = true)
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findOneWithAuthoritiesById(id);
+    }
+
+    public List<AdminUserDTO> getAllUsers() {
+        return userRepository.findAll().stream().map(AdminUserDTO::new).collect(Collectors.toList());
+    }
 }

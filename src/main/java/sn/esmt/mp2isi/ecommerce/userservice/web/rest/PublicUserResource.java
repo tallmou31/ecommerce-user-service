@@ -3,6 +3,7 @@ package sn.esmt.mp2isi.ecommerce.userservice.web.rest;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import sn.esmt.mp2isi.ecommerce.userservice.repository.AuthorityRepository;
+import sn.esmt.mp2isi.ecommerce.userservice.repository.UserRepository;
 import sn.esmt.mp2isi.ecommerce.userservice.service.UserService;
 import sn.esmt.mp2isi.ecommerce.userservice.service.dto.UserDTO;
 import tech.jhipster.web.util.PaginationUtil;
@@ -31,8 +34,14 @@ public class PublicUserResource {
 
     private final UserService userService;
 
-    public PublicUserResource(UserService userService) {
+    private final AuthorityRepository authorityRepository;
+
+    private final UserRepository userRepository;
+
+    public PublicUserResource(UserService userService, AuthorityRepository authorityRepository, UserRepository userRepository) {
         this.userService = userService;
+        this.authorityRepository = authorityRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -64,5 +73,13 @@ public class PublicUserResource {
     @GetMapping("/authorities")
     public List<String> getAuthorities() {
         return userService.getAuthorities();
+    }
+
+    @GetMapping("/admin-emails")
+    public ResponseEntity<List<String>> getAdminEmails() {
+        var adminAuth = authorityRepository.findByNameIgnoreCase("ROLE_ADMIN").orElseThrow();
+        return ResponseEntity.ok(
+            userRepository.findAllByAuthoritiesContaining(adminAuth).stream().map(u -> u.getEmail()).collect(Collectors.toList())
+        );
     }
 }
